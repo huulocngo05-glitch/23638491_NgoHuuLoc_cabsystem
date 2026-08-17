@@ -1,9 +1,8 @@
 # 23638491_NgoHuuLoc_cabsystem
-Cau 1 : thống hiện tại còn những yếu điểm nào ?
+B1 : thống hiện tại còn những yếu điểm nào ?
 -	Việc phân công tài xế chủ yếu được thực hiện thủ công
 -	 Khách hàng khó theo dõi trạng thái chuyến đi
 -	Thông tin thanh toán chưa được quản lý tập trung và bộ phận vận hành gặp khó khăn khi muốn mở rộng hệ thống
-Cau 2 : Stackholder va vai trò ?
 ## B2. Xác định Stakeholder và vai trò
 
 | STT | Stakeholder | Vai trò | Mối quan tâm / Nhu cầu |
@@ -126,3 +125,119 @@ quadrantChart
 |           | **FR-10.3** | Hệ thống bảo vệ thông tin cá nhân, thông tin phương tiện, dữ liệu vị trí và dữ liệu giao dịch.                               |
 |           | **FR-10.4** | Hệ thống không lưu trực tiếp thông tin nhạy cảm của thẻ hoặc tài khoản thanh toán.                                           |
 |           | **FR-10.5** | Hệ thống lưu vết các thao tác quan trọng để phục vụ kiểm tra và xử lý sự cố.                                                 |
+##B7 : USECASE 
+## Use Case Diagram - CAB System
+
+```mermaid
+flowchart LR
+
+    %% ================= ACTORS =================
+    Customer["👤 Khách hàng"]
+    Driver["🚗 Tài xế"]
+    Staff["👨‍💼 Nhân viên vận hành"]
+    Payment["💳 Payment Provider"]
+    Notification["🔔 Notification Provider"]
+
+    %% ================= SYSTEM =================
+    subgraph CAB["CAB SYSTEM"]
+
+        %% CUSTOMER
+        subgraph CUSTOMER_UC["Khách hàng"]
+            C1(("Đăng ký tài khoản"))
+            C2(("Đăng nhập"))
+            C3(("Quản lý hồ sơ"))
+            C4(("Đặt xe"))
+            C5(("Theo dõi chuyến"))
+            C6(("Xem lịch sử chuyến"))
+            C7(("Thanh toán"))
+            C8(("Đánh giá tài xế"))
+        end
+
+        %% DRIVER
+        subgraph DRIVER_UC["Tài xế"]
+            D1(("Đăng nhập"))
+            D2(("Quản lý hồ sơ"))
+            D3(("Cập nhật trạng thái"))
+            D4(("Nhận yêu cầu chuyến"))
+            D5(("Chấp nhận chuyến"))
+            D6(("Từ chối chuyến"))
+            D7(("Cập nhật trạng thái chuyến"))
+            D8(("Cập nhật vị trí"))
+        end
+
+        %% OPERATION
+        subgraph OP_UC["Nhân viên vận hành"]
+            O1(("Đăng nhập quản trị"))
+            O2(("Quản lý khách hàng"))
+            O3(("Quản lý tài xế"))
+            O4(("Quản lý phương tiện"))
+            O5(("Giám sát chuyến"))
+            O6(("Xử lý chuyến lỗi"))
+            O7(("Tra cứu giao dịch"))
+            O8(("Xem báo cáo"))
+            O9(("Quản lý quyền"))
+            O10(("Xem Audit Log"))
+        end
+
+        %% CORE
+        M1(("Tìm & phân công tài xế"))
+        M2(("Tính cước"))
+        M3(("Gửi thông báo"))
+        M4(("Quản lý chuyến đi"))
+    end
+
+    %% ================= CUSTOMER =================
+    Customer --> C1
+    Customer --> C2
+    Customer --> C3
+    Customer --> C4
+    Customer --> C5
+    Customer --> C6
+    Customer --> C7
+    Customer --> C8
+
+    %% ================= DRIVER =================
+    Driver --> D1
+    Driver --> D2
+    Driver --> D3
+    Driver --> D4
+    Driver --> D5
+    Driver --> D6
+    Driver --> D7
+    Driver --> D8
+
+    %% ================= OPERATION =================
+    Staff --> O1
+    Staff --> O2
+    Staff --> O3
+    Staff --> O4
+    Staff --> O5
+    Staff --> O6
+    Staff --> O7
+    Staff --> O8
+    Staff --> O9
+    Staff --> O10
+
+    %% ================= CORE FLOW =================
+    C4 --> M1
+    M1 --> D4
+    D5 --> M4
+    D6 --> M1
+    D7 --> M4
+    M4 --> M2
+    M2 --> C7
+
+    %% ================= NOTIFICATION =================
+    C4 --> M3
+    M1 --> M3
+    D5 --> M3
+    D7 --> M3
+    C7 --> M3
+
+    %% ================= EXTERNAL SYSTEM =================
+    C7 --> Payment
+    M3 --> Notification
+```
+##B8 : Đặc tả USECASE
+##B9 : Phân tích quy trình nghiệp vụ ( Business Process ) 
+##B10 : Phân tích quy tắc nghiệp vụ ( Business Rule ) 
