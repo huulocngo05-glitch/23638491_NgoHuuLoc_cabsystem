@@ -131,112 +131,66 @@ quadrantChart
 ```mermaid
 flowchart LR
 
-    %% ================= ACTORS =================
-    Customer["👤 Khách hàng"]
-    Driver["🚗 Tài xế"]
-    Staff["👨‍💼 Nhân viên vận hành"]
-    Payment["💳 Payment Provider"]
-    Notification["🔔 Notification Provider"]
+    Customer["Khách hàng"]
+    Driver["Tài xế"]
+    Staff["Nhân viên vận hành"]
+    Payment["Payment Provider"]
+    Notify["Notification Provider"]
 
-    %% ================= SYSTEM =================
-    subgraph CAB["CAB SYSTEM"]
+    subgraph CAB["HỆ THỐNG CAB"]
 
-        %% CUSTOMER
-        subgraph CUSTOMER_UC["Khách hàng"]
-            C1(("Đăng ký tài khoản"))
-            C2(("Đăng nhập"))
-            C3(("Quản lý hồ sơ"))
-            C4(("Đặt xe"))
-            C5(("Theo dõi chuyến"))
-            C6(("Xem lịch sử chuyến"))
-            C7(("Thanh toán"))
-            C8(("Đánh giá tài xế"))
-        end
+        Login(("Đăng nhập"))
+        Profile(("Quản lý hồ sơ"))
 
-        %% DRIVER
-        subgraph DRIVER_UC["Tài xế"]
-            D1(("Đăng nhập"))
-            D2(("Quản lý hồ sơ"))
-            D3(("Cập nhật trạng thái"))
-            D4(("Nhận yêu cầu chuyến"))
-            D5(("Chấp nhận chuyến"))
-            D6(("Từ chối chuyến"))
-            D7(("Cập nhật trạng thái chuyến"))
-            D8(("Cập nhật vị trí"))
-        end
+        Booking(("Đặt xe"))
+        Tracking(("Theo dõi chuyến"))
+        History(("Lịch sử chuyến"))
+        Rating(("Đánh giá tài xế"))
 
-        %% OPERATION
-        subgraph OP_UC["Nhân viên vận hành"]
-            O1(("Đăng nhập quản trị"))
-            O2(("Quản lý khách hàng"))
-            O3(("Quản lý tài xế"))
-            O4(("Quản lý phương tiện"))
-            O5(("Giám sát chuyến"))
-            O6(("Xử lý chuyến lỗi"))
-            O7(("Tra cứu giao dịch"))
-            O8(("Xem báo cáo"))
-            O9(("Quản lý quyền"))
-            O10(("Xem Audit Log"))
-        end
+        DriverManage(("Quản lý hoạt động tài xế"))
+        Trip(("Thực hiện chuyến"))
 
-        %% CORE
-        M1(("Tìm & phân công tài xế"))
-        M2(("Tính cước"))
-        M3(("Gửi thông báo"))
-        M4(("Quản lý chuyến đi"))
+        Matching(("Tìm & phân công tài xế"))
+        Fare(("Tính cước"))
+        Pay(("Thanh toán"))
+        NotifyUC(("Gửi thông báo"))
+
+        Operation(("Quản lý & giám sát"))
+        Report(("Báo cáo"))
+        Security(("Phân quyền & Audit"))
     end
 
-    %% ================= CUSTOMER =================
-    Customer --> C1
-    Customer --> C2
-    Customer --> C3
-    Customer --> C4
-    Customer --> C5
-    Customer --> C6
-    Customer --> C7
-    Customer --> C8
+    Customer --> Login
+    Driver --> Login
+    Staff --> Login
 
-    %% ================= DRIVER =================
-    Driver --> D1
-    Driver --> D2
-    Driver --> D3
-    Driver --> D4
-    Driver --> D5
-    Driver --> D6
-    Driver --> D7
-    Driver --> D8
+    Customer --> Profile
+    Customer --> Booking
+    Customer --> Tracking
+    Customer --> History
+    Customer --> Rating
+    Customer --> Pay
 
-    %% ================= OPERATION =================
-    Staff --> O1
-    Staff --> O2
-    Staff --> O3
-    Staff --> O4
-    Staff --> O5
-    Staff --> O6
-    Staff --> O7
-    Staff --> O8
-    Staff --> O9
-    Staff --> O10
+    Driver --> Profile
+    Driver --> DriverManage
+    Driver --> Trip
 
-    %% ================= CORE FLOW =================
-    C4 --> M1
-    M1 --> D4
-    D5 --> M4
-    D6 --> M1
-    D7 --> M4
-    M4 --> M2
-    M2 --> C7
+    Staff --> Operation
+    Staff --> Report
+    Staff --> Security
 
-    %% ================= NOTIFICATION =================
-    C4 --> M3
-    M1 --> M3
-    D5 --> M3
-    D7 --> M3
-    C7 --> M3
+    Booking --> Matching
+    Matching --> Trip
+    Trip --> Fare
+    Fare --> Pay
 
-    %% ================= EXTERNAL SYSTEM =================
-    C7 --> Payment
-    M3 --> Notification
+    Booking --> NotifyUC
+    Matching --> NotifyUC
+    Trip --> NotifyUC
+    Pay --> NotifyUC
+
+    Pay --> Payment
+    NotifyUC --> Notify
 ```
 ##B8 : Đặc tả USECASE
 ##B9 : Phân tích quy trình nghiệp vụ ( Business Process ) 
