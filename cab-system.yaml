@@ -1,0 +1,307 @@
+project:
+  id: "23638491_NgoHuuLoc_cabsystem"
+  name: "CAB System"
+  description: "Hệ thống quản lý và vận hành dịch vụ đặt xe"
+
+b1_current_problems:
+  - id: P01
+    description: "Việc phân công tài xế chủ yếu được thực hiện thủ công"
+  - id: P02
+    description: "Khách hàng khó theo dõi trạng thái chuyến đi"
+  - id: P03
+    description: "Thông tin thanh toán chưa được quản lý tập trung"
+  - id: P04
+    description: "Bộ phận vận hành gặp khó khăn khi muốn mở rộng hệ thống"
+
+b2_stakeholders:
+  - id: 1
+    name: "Khách hàng"
+    role: "Sử dụng dịch vụ đặt xe"
+    concerns:
+      - "Đặt xe"
+      - "Theo dõi chuyến đi"
+      - "Thanh toán"
+
+  - id: 2
+    name: "Tài xế"
+    role: "Nhận và thực hiện chuyến xe"
+    concerns:
+      - "Nhận chuyến"
+      - "Cập nhật trạng thái"
+      - "Quản lý hồ sơ và phương tiện"
+
+  - id: 3
+    name: "Nhân viên vận hành"
+    role: "Điều phối và quản lý hoạt động"
+    concerns:
+      - "Quản lý khách hàng"
+      - "Quản lý tài xế"
+      - "Quản lý chuyến đi"
+
+  - id: 4
+    name: "Quản trị viên hệ thống"
+    role: "Quản trị hệ thống và phân quyền"
+    concerns:
+      - "Quản lý tài khoản"
+      - "Phân quyền"
+      - "Cấu hình hệ thống"
+
+  - id: 5
+    name: "Ban lãnh đạo / Quản lý doanh nghiệp"
+    role: "Quản lý hoạt động kinh doanh"
+    concerns:
+      - "Theo dõi doanh thu"
+      - "Theo dõi số lượng chuyến"
+      - "Theo dõi hiệu quả hoạt động"
+
+  - id: 6
+    name: "Nhà cung cấp dịch vụ thanh toán"
+    role: "Xử lý thanh toán điện tử"
+
+  - id: 7
+    name: "Nhà cung cấp dịch vụ thông báo"
+    role: "Cung cấp dịch vụ gửi thông báo"
+
+  - id: 8
+    name: "Business Analyst"
+    role: "Phân tích nghiệp vụ và yêu cầu"
+
+  - id: 9
+    name: "Developer"
+    role: "Xây dựng hệ thống"
+
+  - id: 10
+    name: "DevOps"
+    role: "Triển khai và duy trì hệ thống"
+
+b4_scope:
+  - id: 1
+    domain: "Quản lý người dùng & định danh"
+    modules:
+      - "Người dùng"
+      - "Đăng nhập"
+      - "Xác thực"
+      - "Phân quyền"
+      - "Tài xế"
+      - "Phương tiện"
+
+  - id: 2
+    domain: "Quản lý chuyến xe"
+    modules:
+      - "Đặt xe"
+      - "Tìm tài xế"
+      - "Phân công tài xế"
+      - "Quản lý chuyến"
+      - "Vị trí"
+
+  - id: 3
+    domain: "Giá cước & thanh toán"
+    modules:
+      - "Tính cước"
+      - "Thanh toán"
+      - "Lịch sử giao dịch"
+
+  - id: 4
+    domain: "Thông báo"
+    modules:
+      - "Push Notification"
+      - "SMS"
+      - "Email"
+
+  - id: 5
+    domain: "Vận hành"
+    modules:
+      - "Theo dõi chuyến"
+      - "Quản lý tài xế"
+      - "Hỗ trợ khách hàng"
+
+  - id: 6
+    domain: "Báo cáo & phân tích"
+    modules:
+      - "Doanh thu"
+      - "Số chuyến"
+      - "Tỷ lệ hoàn thành"
+      - "Hiệu quả tài xế"
+
+  - id: 7
+    domain: "Quản trị & kiểm soát"
+    modules:
+      - "Cấu hình hệ thống"
+      - "Bảo mật"
+      - "Phân quyền"
+      - "Audit log"
+
+b5_business_requirements:
+  - id: MVP-BR01
+    requirement: "Cho phép khách hàng đăng ký, đăng nhập và sử dụng dịch vụ đặt xe"
+
+  - id: MVP-BR02
+    requirement: "Cho phép khách hàng tạo yêu cầu đặt xe với điểm đón, điểm đến và loại xe"
+
+  - id: MVP-BR03
+    requirement: "Tự động tìm và phân công tài xế phù hợp"
+
+  - id: MVP-BR04
+    requirement: "Cho phép tài xế nhận hoặc từ chối chuyến và cập nhật trạng thái"
+
+  - id: MVP-BR05
+    requirement: "Cho phép khách hàng theo dõi trạng thái chuyến và thông tin tài xế"
+
+  - id: MVP-BR06
+    requirement: "Quản lý việc tính cước và số tiền khách hàng cần thanh toán"
+
+  - id: MVP-BR07
+    requirement: "Hỗ trợ thanh toán tiền mặt và thanh toán điện tử"
+
+  - id: MVP-BR08
+    requirement: "Gửi thông báo về các sự kiện quan trọng của chuyến đi"
+
+  - id: MVP-BR09
+    requirement: "Nhân viên vận hành có khả năng giám sát chuyến và tài xế"
+
+  - id: MVP-BR10
+    requirement: "Đảm bảo xác thực, phân quyền, bảo mật dữ liệu và lưu vết thao tác"
+
+b7_actors:
+  customer:
+    name: "Khách hàng"
+    use_cases:
+      - "Đăng ký tài khoản"
+      - "Quản lý thông tin cá nhân"
+      - "Đặt xe"
+      - "Theo dõi chuyến đi"
+      - "Thanh toán"
+      - "Đăng nhập / Đăng xuất"
+
+  driver:
+    name: "Tài xế"
+    use_cases:
+      - "Quản lý thông tin cá nhân"
+      - "Cập nhật trạng thái làm việc"
+      - "Tiếp nhận chuyến xe"
+      - "Cập nhật trạng thái chuyến xe"
+      - "Đăng nhập / Đăng xuất"
+
+  staff:
+    name: "Nhân viên vận hành"
+    use_cases:
+      - "Quản lý khách hàng"
+      - "Quản lý tài xế"
+      - "Quản lý phương tiện"
+      - "Giám sát chuyến xe"
+      - "Tra cứu chuyến xe và giao dịch"
+      - "Xem báo cáo và thống kê"
+      - "Đăng nhập / Đăng xuất"
+
+  admin:
+    name: "Quản trị viên hệ thống"
+    use_cases:
+      - "Quản lý tài khoản"
+      - "Phân quyền người dùng"
+      - "Cấu hình hệ thống"
+      - "Xem nhật ký hệ thống"
+      - "Đăng nhập / Đăng xuất"
+
+b9_business_processes:
+  - id: BP01
+    name: "Quản lý và xác thực tài khoản"
+    steps:
+      - "Người dùng đăng ký hoặc được cấp tài khoản"
+      - "Người dùng đăng nhập hệ thống"
+      - "Hệ thống xác thực thông tin"
+      - "Hệ thống xác định vai trò và quyền truy cập"
+      - "Người dùng sử dụng chức năng được cấp quyền"
+      - "Người dùng đăng xuất khi kết thúc"
+
+  - id: BP02
+    name: "Đặt xe và phân công tài xế"
+    steps:
+      - "Khách hàng nhập thông tin chuyến đi và gửi yêu cầu đặt xe"
+      - "Hệ thống tiếp nhận yêu cầu"
+      - "Hệ thống tìm tài xế phù hợp đang sẵn sàng"
+      - "Hệ thống gửi yêu cầu đến tài xế"
+      - "Tài xế tiếp nhận chuyến xe"
+      - "Hệ thống phân công tài xế và cập nhật thông tin chuyến xe"
+      - "Hệ thống thông báo thông tin cho khách hàng"
+
+  - id: BP03
+    name: "Thực hiện và theo dõi chuyến xe"
+    steps:
+      - "Tài xế di chuyển đến điểm đón"
+      - "Tài xế cập nhật trạng thái chuyến xe"
+      - "Hệ thống ghi nhận trạng thái"
+      - "Khách hàng theo dõi thông tin chuyến đi"
+      - "Tài xế hoàn thành chuyến xe"
+      - "Hệ thống cập nhật trạng thái hoàn thành"
+
+  - id: BP04
+    name: "Tính cước và thanh toán"
+    steps:
+      - "Hệ thống xác nhận chuyến xe hoàn thành"
+      - "Hệ thống tính cước phí"
+      - "Hệ thống hiển thị thông tin thanh toán"
+      - "Khách hàng thực hiện thanh toán"
+      - "Hệ thống xử lý và ghi nhận kết quả thanh toán"
+      - "Thông tin giao dịch được lưu lại"
+
+  - id: BP05
+    name: "Quản lý và vận hành hệ thống"
+    steps:
+      - "Nhân viên vận hành quản lý khách hàng, tài xế và phương tiện"
+      - "Giám sát và tra cứu thông tin chuyến xe, giao dịch"
+      - "Hệ thống tổng hợp dữ liệu báo cáo và thống kê"
+      - "Quản trị viên quản lý tài khoản và phân quyền"
+      - "Quản trị viên cấu hình và theo dõi nhật ký hệ thống"
+
+b10_business_rules:
+  - id: BR01
+    group: "Tài khoản"
+    rule: "Người dùng phải có tài khoản hợp lệ để sử dụng các chức năng yêu cầu xác thực"
+
+  - id: BR02
+    group: "Phân quyền"
+    rule: "Người dùng chỉ được truy cập các chức năng phù hợp với vai trò và quyền hạn được cấp"
+
+  - id: BR03
+    group: "Đặt xe"
+    rule: "Khách hàng phải cung cấp đầy đủ thông tin cần thiết khi tạo yêu cầu đặt xe"
+
+  - id: BR04
+    group: "Phân công"
+    rule: "Chỉ tài xế đang ở trạng thái sẵn sàng mới được hệ thống xem xét phân công chuyến xe"
+
+  - id: BR05
+    group: "Phân công"
+    rule: "Một chuyến xe chỉ được phân công cho một tài xế tại cùng một thời điểm"
+
+  - id: BR06
+    group: "Phân công"
+    rule: "Một tài xế không được thực hiện nhiều chuyến xe cùng lúc"
+
+  - id: BR07
+    group: "Chuyến xe"
+    rule: "Tài xế phải cập nhật trạng thái trong quá trình thực hiện chuyến xe"
+
+  - id: BR08
+    group: "Theo dõi"
+    rule: "Khách hàng chỉ được theo dõi thông tin của chuyến xe thuộc tài khoản của mình"
+
+  - id: BR09
+    group: "Thanh toán"
+    rule: "Cước phí được xác định dựa trên thông tin thực hiện của chuyến xe"
+
+  - id: BR10
+    group: "Thanh toán"
+    rule: "Thông tin thanh toán và kết quả giao dịch phải được lưu trong hệ thống"
+
+  - id: BR11
+    group: "Vận hành"
+    rule: "Nhân viên vận hành chỉ được thực hiện các chức năng thuộc quyền hạn được cấp"
+
+  - id: BR12
+    group: "Quản trị"
+    rule: "Quản trị viên có quyền quản lý tài khoản và phân quyền người dùng"
+
+  - id: BR13
+    group: "Nhật ký"
+    rule: "Các hoạt động quan trọng trong hệ thống cần được ghi nhận vào nhật ký hệ thống"
