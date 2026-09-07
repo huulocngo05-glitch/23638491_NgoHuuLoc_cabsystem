@@ -265,5 +265,28 @@ flowchart LR
     class ManageAccount,Authorization,Configuration,AuditLog usecase
 ```
 ##B8 : Đặc tả USECASE
-##B9 : Phân tích quy trình nghiệp vụ ( Business Process ) 
+##B9 : Phân tích quy trình nghiệp vụ ( Business Process )
+| Mã   | Quy trình nghiệp vụ             | Các bước thực hiện                                                                                                                                                                                                                                                                                                                            |
+| ---- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| BP01 | Quản lý và xác thực tài khoản   | 1. Người dùng đăng ký hoặc được cấp tài khoản.<br>2. Người dùng đăng nhập hệ thống.<br>3. Hệ thống xác thực thông tin.<br>4. Hệ thống xác định vai trò và quyền truy cập.<br>5. Người dùng sử dụng chức năng được cấp quyền.<br>6. Người dùng đăng xuất khi kết thúc.                                                                         |
+| BP02 | Đặt xe và phân công tài xế      | 1. Khách hàng nhập thông tin chuyến đi và gửi yêu cầu đặt xe.<br>2. Hệ thống tiếp nhận yêu cầu.<br>3. Hệ thống tìm tài xế phù hợp đang sẵn sàng.<br>4. Hệ thống gửi yêu cầu đến tài xế.<br>5. Tài xế tiếp nhận chuyến xe.<br>6. Hệ thống phân công tài xế và cập nhật thông tin chuyến xe.<br>7. Hệ thống thông báo thông tin cho khách hàng. |
+| BP03 | Thực hiện và theo dõi chuyến xe | 1. Tài xế di chuyển đến điểm đón.<br>2. Tài xế cập nhật trạng thái chuyến xe.<br>3. Hệ thống ghi nhận trạng thái.<br>4. Khách hàng theo dõi thông tin chuyến đi.<br>5. Tài xế hoàn thành chuyến xe.<br>6. Hệ thống cập nhật trạng thái hoàn thành.                                                                                            |
+| BP04 | Tính cước và thanh toán         | 1. Hệ thống xác nhận chuyến xe hoàn thành.<br>2. Hệ thống tính cước phí.<br>3. Hệ thống hiển thị thông tin thanh toán.<br>4. Khách hàng thực hiện thanh toán.<br>5. Hệ thống xử lý và ghi nhận kết quả thanh toán.<br>6. Thông tin giao dịch được lưu lại.                                                                                    |
+| BP05 | Quản lý và vận hành hệ thống    | 1. Nhân viên vận hành quản lý khách hàng, tài xế và phương tiện.<br>2. Giám sát và tra cứu thông tin chuyến xe, giao dịch.<br>3. Hệ thống tổng hợp dữ liệu báo cáo và thống kê.<br>4. Quản trị viên quản lý tài khoản và phân quyền.<br>5. Quản trị viên cấu hình và theo dõi nhật ký hệ thống.                                               |
+
 ##B10 : Phân tích quy tắc nghiệp vụ ( Business Rule ) 
+| Mã | Nhóm | Quy tắc nghiệp vụ |
+|---|---|---|
+| BR01 | Tài khoản | Người dùng phải có tài khoản hợp lệ để sử dụng các chức năng yêu cầu xác thực. |
+| BR02 | Phân quyền | Người dùng chỉ được truy cập các chức năng phù hợp với vai trò và quyền hạn được cấp. |
+| BR03 | Đặt xe | Khách hàng phải cung cấp đầy đủ thông tin cần thiết khi tạo yêu cầu đặt xe. |
+| BR04 | Phân công | Chỉ tài xế đang ở trạng thái sẵn sàng mới được hệ thống xem xét phân công chuyến xe. |
+| BR05 | Phân công | Một chuyến xe chỉ được phân công cho một tài xế tại cùng một thời điểm. |
+| BR06 | Phân công | Một tài xế không được thực hiện nhiều chuyến xe cùng lúc. |
+| BR07 | Chuyến xe | Tài xế phải cập nhật trạng thái trong quá trình thực hiện chuyến xe. |
+| BR08 | Theo dõi | Khách hàng chỉ được theo dõi thông tin của chuyến xe thuộc tài khoản của mình. |
+| BR09 | Thanh toán | Cước phí được xác định dựa trên thông tin thực hiện của chuyến xe. |
+| BR10 | Thanh toán | Thông tin thanh toán và kết quả giao dịch phải được lưu trong hệ thống. |
+| BR11 | Vận hành | Nhân viên vận hành chỉ được thực hiện các chức năng thuộc quyền hạn được cấp. |
+| BR12 | Quản trị | Quản trị viên có quyền quản lý tài khoản và phân quyền người dùng. |
+| BR13 | Nhật ký | Các hoạt động quan trọng trong hệ thống cần được ghi nhận vào nhật ký hệ thống. |
