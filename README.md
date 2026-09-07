@@ -131,121 +131,102 @@ quadrantChart
 ```mermaid
 flowchart LR
 
-    %% =====================================================
+    %% =============================
     %% ACTOR BÊN TRÁI
-    %% =====================================================
+    %% =============================
 
-    Admin["Quản trị viên hệ thống"]
-    Driver["Tài xế"]
-    Customer["Khách hàng"]
-    Staff["Nhân viên vận hành"]
+    subgraph LEFT[" "]
+        direction TB
+        Customer["Khách hàng"]
+        Driver["Tài xế"]
+    end
 
 
-    %% =====================================================
+    %% =============================
     %% HỆ THỐNG CAB
-    %% =====================================================
+    %% =============================
 
     subgraph CAB["HỆ THỐNG CAB"]
-
         direction TB
 
-        %% ---------------------------
-        %% QUẢN TRỊ VIÊN
-        %% ---------------------------
+        %% =============================
+        %% HÀNG TRÊN
+        %% =============================
 
-        ManageAccount([Quản lý tài khoản])
-        Logout([Đăng xuất])
-        Configuration([Cấu hình hệ thống])
-        AuditLog([Xem nhật ký hệ thống])
+        subgraph TOP[" "]
+            direction LR
 
-        Authorization([Phân quyền người dùng])
+            subgraph CUSTOMER_GROUP[" "]
+                direction TB
+                Register([Đăng ký tài khoản])
+                CustomerProfile([Quản lý thông tin cá nhân])
+                Booking([Đặt xe])
+                Tracking([Theo dõi chuyến đi])
+                Payment([Thanh toán])
+            end
 
+            Login([Đăng nhập])
 
-        %% ---------------------------
-        %% TÀI XẾ
-        %% ---------------------------
-
-        DriverProfile([Quản lý thông tin cá nhân])
-        WorkingStatus([Cập nhật trạng thái làm việc])
-        ReceiveTrip([Tiếp nhận chuyến xe])
-        UpdateTrip([Cập nhật trạng thái chuyến xe])
-
-
-        %% ---------------------------
-        %% KHÁCH HÀNG
-        %% ---------------------------
-
-        Register([Đăng ký tài khoản])
-        CustomerProfile([Quản lý thông tin cá nhân])
-        Booking([Đặt xe])
-        Tracking([Theo dõi chuyến đi])
-        Payment([Thanh toán])
+            subgraph STAFF_GROUP[" "]
+                direction TB
+                ManageCustomer([Quản lý khách hàng])
+                ManageDriver([Quản lý tài xế])
+                ManageVehicle([Quản lý phương tiện])
+                MonitorTrip([Giám sát chuyến xe])
+                Lookup([Tra cứu chuyến xe và giao dịch])
+                Report([Xem báo cáo và thống kê])
+            end
+        end
 
 
-        %% ---------------------------
-        %% NHÂN VIÊN VẬN HÀNH
-        %% ---------------------------
+        %% =============================
+        %% HÀNG DƯỚI
+        %% =============================
 
-        ManageDriver([Quản lý tài xế])
-        ManageCustomer([Quản lý khách hàng])
-        Report([Xem báo cáo và thống kê])
-        Lookup([Tra cứu chuyến xe và giao dịch])
-        HandleIncident([Xử lý sự cố])
+        subgraph BOTTOM[" "]
+            direction LR
 
-        ManageVehicle([Quản lý phương tiện])
-        MonitorTrip([Giám sát chuyến xe])
+            subgraph DRIVER_GROUP[" "]
+                direction TB
+                DriverProfile([Quản lý thông tin cá nhân])
+                WorkingStatus([Cập nhật trạng thái làm việc])
+                ReceiveTrip([Tiếp nhận chuyến xe])
+                UpdateTrip([Cập nhật trạng thái chuyến xe])
+            end
+
+            Logout([Đăng xuất])
+
+            subgraph ADMIN_GROUP[" "]
+                direction TB
+                ManageAccount([Quản lý tài khoản])
+                Authorization([Phân quyền người dùng])
+                Configuration([Cấu hình hệ thống])
+                AuditLog([Xem nhật ký hệ thống])
+            end
+        end
 
 
-        %% ---------------------------
-        %% USE CASE DÙNG CHUNG
-        %% ---------------------------
-
-        Login([Đăng nhập])
-
-
-        %% =================================================
-        %% INCLUDE
-        %% =================================================
-
+        %% QUAN HỆ
         ManageAccount -.->|«include»| Authorization
-
-        ManageDriver -.->|«include»| ManageVehicle
-
-
-        %% =================================================
-        %% EXTEND
-        %% =================================================
-
         Logout -.->|«extend»| Login
-
-        HandleIncident -.->|«extend»| MonitorTrip
 
     end
 
 
-    %% =====================================================
-    %% ACTOR - QUẢN TRỊ VIÊN
-    %% =====================================================
+    %% =============================
+    %% ACTOR BÊN PHẢI
+    %% =============================
 
-    Admin --- ManageAccount
-    Admin --- Logout
-    Admin --- Configuration
-    Admin --- AuditLog
-
-
-    %% =====================================================
-    %% ACTOR - TÀI XẾ
-    %% =====================================================
-
-    Driver --- DriverProfile
-    Driver --- WorkingStatus
-    Driver --- ReceiveTrip
-    Driver --- UpdateTrip
+    subgraph RIGHT[" "]
+        direction TB
+        Staff["Nhân viên vận hành"]
+        Admin["Quản trị viên hệ thống"]
+    end
 
 
-    %% =====================================================
-    %% ACTOR - KHÁCH HÀNG
-    %% =====================================================
+    %% =============================
+    %% KHÁCH HÀNG
+    %% =============================
 
     Customer --- Register
     Customer --- CustomerProfile
@@ -254,47 +235,82 @@ flowchart LR
     Customer --- Payment
 
 
-    %% =====================================================
-    %% ACTOR - NHÂN VIÊN VẬN HÀNH
-    %% =====================================================
+    %% =============================
+    %% TÀI XẾ
+    %% =============================
 
-    Staff --- ManageDriver
+    Driver --- DriverProfile
+    Driver --- WorkingStatus
+    Driver --- ReceiveTrip
+    Driver --- UpdateTrip
+
+
+    %% =============================
+    %% NHÂN VIÊN VẬN HÀNH
+    %% =============================
+
     Staff --- ManageCustomer
-    Staff --- Report
+    Staff --- ManageDriver
+    Staff --- ManageVehicle
+    Staff --- MonitorTrip
     Staff --- Lookup
-    Staff --- HandleIncident
+    Staff --- Report
 
 
-    %% =====================================================
-    %% ĐĂNG NHẬP DÙNG CHUNG
-    %% =====================================================
+    %% =============================
+    %% QUẢN TRỊ VIÊN
+    %% =============================
 
-    Admin --- Login
-    Driver --- Login
+    Admin --- ManageAccount
+    Admin --- Authorization
+    Admin --- Configuration
+    Admin --- AuditLog
+
+
+    %% =============================
+    %% ĐĂNG NHẬP CHUNG
+    %% =============================
+
     Customer --- Login
+    Driver --- Login
     Staff --- Login
+    Admin --- Login
+
+    Admin --- Logout
 
 
-    %% =====================================================
+    %% =============================
+    %% ẨN KHUNG NHÓM
+    %% =============================
+
+    style LEFT fill:none,stroke:none
+    style RIGHT fill:none,stroke:none
+    style TOP fill:none,stroke:none
+    style BOTTOM fill:none,stroke:none
+
+    style CUSTOMER_GROUP fill:none,stroke:none
+    style DRIVER_GROUP fill:none,stroke:none
+    style STAFF_GROUP fill:none,stroke:none
+    style ADMIN_GROUP fill:none,stroke:none
+
+
+    %% =============================
     %% STYLE
-    %% =====================================================
+    %% =============================
 
-    classDef actor fill:#f5f5f5,stroke:#333,stroke-width:2px;
-    classDef usecase fill:#ffffff,stroke:#333,stroke-width:1.5px;
+    classDef actor fill:#f5f5f5,stroke:#333,stroke-width:2px
+    classDef usecase fill:#ffffff,stroke:#333,stroke-width:1.5px
 
-    class Admin,Driver,Customer,Staff actor;
+    class Customer,Driver,Staff,Admin actor
 
-    class ManageAccount,Logout,Configuration,AuditLog usecase;
-    class Authorization usecase;
+    class Register,CustomerProfile,Booking,Tracking,Payment usecase
+    class DriverProfile,WorkingStatus,ReceiveTrip,UpdateTrip usecase
 
-    class DriverProfile,WorkingStatus,ReceiveTrip,UpdateTrip usecase;
+    class ManageCustomer,ManageDriver,ManageVehicle usecase
+    class MonitorTrip,Lookup,Report usecase
 
-    class Register,CustomerProfile,Booking,Tracking,Payment usecase;
-
-    class ManageDriver,ManageCustomer,Report,Lookup,HandleIncident usecase;
-    class ManageVehicle,MonitorTrip usecase;
-
-    class Login usecase;
+    class ManageAccount,Authorization,Configuration,AuditLog usecase
+    class Login,Logout usecase
 ```
 ##B8 : Đặc tả USECASE
 ##B9 : Phân tích quy trình nghiệp vụ ( Business Process ) 
