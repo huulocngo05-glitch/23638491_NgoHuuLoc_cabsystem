@@ -131,66 +131,170 @@ quadrantChart
 ```mermaid
 flowchart LR
 
-    Customer["Khách hàng"]
+    %% =====================================================
+    %% ACTOR BÊN TRÁI
+    %% =====================================================
+
+    Admin["Quản trị viên hệ thống"]
     Driver["Tài xế"]
+    Customer["Khách hàng"]
     Staff["Nhân viên vận hành"]
-    Payment["Payment Provider"]
-    Notify["Notification Provider"]
+
+
+    %% =====================================================
+    %% HỆ THỐNG CAB
+    %% =====================================================
 
     subgraph CAB["HỆ THỐNG CAB"]
 
-        Login(("Đăng nhập"))
-        Profile(("Quản lý hồ sơ"))
+        direction TB
 
-        Booking(("Đặt xe"))
-        Tracking(("Theo dõi chuyến"))
-        History(("Lịch sử chuyến"))
-        Rating(("Đánh giá tài xế"))
+        %% ---------------------------
+        %% QUẢN TRỊ VIÊN
+        %% ---------------------------
 
-        DriverManage(("Quản lý hoạt động tài xế"))
-        Trip(("Thực hiện chuyến"))
+        ManageAccount([Quản lý tài khoản])
+        Logout([Đăng xuất])
+        Configuration([Cấu hình hệ thống])
+        AuditLog([Xem nhật ký hệ thống])
 
-        Matching(("Tìm & phân công tài xế"))
-        Fare(("Tính cước"))
-        Pay(("Thanh toán"))
-        NotifyUC(("Gửi thông báo"))
+        Authorization([Phân quyền người dùng])
 
-        Operation(("Quản lý & giám sát"))
-        Report(("Báo cáo"))
-        Security(("Phân quyền & Audit"))
+
+        %% ---------------------------
+        %% TÀI XẾ
+        %% ---------------------------
+
+        DriverProfile([Quản lý thông tin cá nhân])
+        WorkingStatus([Cập nhật trạng thái làm việc])
+        ReceiveTrip([Tiếp nhận chuyến xe])
+        UpdateTrip([Cập nhật trạng thái chuyến xe])
+
+
+        %% ---------------------------
+        %% KHÁCH HÀNG
+        %% ---------------------------
+
+        Register([Đăng ký tài khoản])
+        CustomerProfile([Quản lý thông tin cá nhân])
+        Booking([Đặt xe])
+        Tracking([Theo dõi chuyến đi])
+        Payment([Thanh toán])
+
+
+        %% ---------------------------
+        %% NHÂN VIÊN VẬN HÀNH
+        %% ---------------------------
+
+        ManageDriver([Quản lý tài xế])
+        ManageCustomer([Quản lý khách hàng])
+        Report([Xem báo cáo và thống kê])
+        Lookup([Tra cứu chuyến xe và giao dịch])
+        HandleIncident([Xử lý sự cố])
+
+        ManageVehicle([Quản lý phương tiện])
+        MonitorTrip([Giám sát chuyến xe])
+
+
+        %% ---------------------------
+        %% USE CASE DÙNG CHUNG
+        %% ---------------------------
+
+        Login([Đăng nhập])
+
+
+        %% =================================================
+        %% INCLUDE
+        %% =================================================
+
+        ManageAccount -.->|«include»| Authorization
+
+        ManageDriver -.->|«include»| ManageVehicle
+
+
+        %% =================================================
+        %% EXTEND
+        %% =================================================
+
+        Logout -.->|«extend»| Login
+
+        HandleIncident -.->|«extend»| MonitorTrip
+
     end
 
-    Customer --> Login
-    Driver --> Login
-    Staff --> Login
 
-    Customer --> Profile
-    Customer --> Booking
-    Customer --> Tracking
-    Customer --> History
-    Customer --> Rating
-    Customer --> Pay
+    %% =====================================================
+    %% ACTOR - QUẢN TRỊ VIÊN
+    %% =====================================================
 
-    Driver --> Profile
-    Driver --> DriverManage
-    Driver --> Trip
+    Admin --- ManageAccount
+    Admin --- Logout
+    Admin --- Configuration
+    Admin --- AuditLog
 
-    Staff --> Operation
-    Staff --> Report
-    Staff --> Security
 
-    Booking --> Matching
-    Matching --> Trip
-    Trip --> Fare
-    Fare --> Pay
+    %% =====================================================
+    %% ACTOR - TÀI XẾ
+    %% =====================================================
 
-    Booking --> NotifyUC
-    Matching --> NotifyUC
-    Trip --> NotifyUC
-    Pay --> NotifyUC
+    Driver --- DriverProfile
+    Driver --- WorkingStatus
+    Driver --- ReceiveTrip
+    Driver --- UpdateTrip
 
-    Pay --> Payment
-    NotifyUC --> Notify
+
+    %% =====================================================
+    %% ACTOR - KHÁCH HÀNG
+    %% =====================================================
+
+    Customer --- Register
+    Customer --- CustomerProfile
+    Customer --- Booking
+    Customer --- Tracking
+    Customer --- Payment
+
+
+    %% =====================================================
+    %% ACTOR - NHÂN VIÊN VẬN HÀNH
+    %% =====================================================
+
+    Staff --- ManageDriver
+    Staff --- ManageCustomer
+    Staff --- Report
+    Staff --- Lookup
+    Staff --- HandleIncident
+
+
+    %% =====================================================
+    %% ĐĂNG NHẬP DÙNG CHUNG
+    %% =====================================================
+
+    Admin --- Login
+    Driver --- Login
+    Customer --- Login
+    Staff --- Login
+
+
+    %% =====================================================
+    %% STYLE
+    %% =====================================================
+
+    classDef actor fill:#f5f5f5,stroke:#333,stroke-width:2px;
+    classDef usecase fill:#ffffff,stroke:#333,stroke-width:1.5px;
+
+    class Admin,Driver,Customer,Staff actor;
+
+    class ManageAccount,Logout,Configuration,AuditLog usecase;
+    class Authorization usecase;
+
+    class DriverProfile,WorkingStatus,ReceiveTrip,UpdateTrip usecase;
+
+    class Register,CustomerProfile,Booking,Tracking,Payment usecase;
+
+    class ManageDriver,ManageCustomer,Report,Lookup,HandleIncident usecase;
+    class ManageVehicle,MonitorTrip usecase;
+
+    class Login usecase;
 ```
 ##B8 : Đặc tả USECASE
 ##B9 : Phân tích quy trình nghiệp vụ ( Business Process ) 
