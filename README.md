@@ -265,6 +265,575 @@ flowchart LR
     class ManageAccount,Authorization,Configuration,AuditLog usecase
 ```
 ##B8 : Đặc tả USECASE
+# B8. ĐẶC TẢ USE CASE
+
+---
+
+# I. KHÁCH HÀNG
+
+## UC01. Đăng ký tài khoản
+
+| Mục | Nội dung |
+|---|---|
+| **Tiền điều kiện** | Khách hàng chưa có tài khoản trên hệ thống. Hệ thống đang hoạt động bình thường. |
+| **Hậu điều kiện** | Nếu đăng ký thành công, tài khoản khách hàng được tạo và thông tin được lưu vào CSDL. Nếu đăng ký thất bại hoặc bị hủy, tài khoản không được tạo. |
+| **Actor chính** | Khách hàng |
+| **Actor phụ** | Không |
+
+### Basic Flow
+
+| Khách hàng | Hệ thống |
+|---|---|
+| 1. Chọn chức năng **"Đăng ký tài khoản"**. | 2. Hiển thị biểu mẫu đăng ký gồm: họ tên, số điện thoại, email, mật khẩu và xác nhận mật khẩu. |
+| 3. Nhập đầy đủ thông tin đăng ký. | 4. Kiểm tra tính đầy đủ và hợp lệ của thông tin. |
+| | 5. Kiểm tra số điện thoại/email đã tồn tại trong hệ thống hay chưa. |
+| 6. Chọn **"Đăng ký"**. | 7. Tạo tài khoản khách hàng. |
+| | 8. Lưu thông tin tài khoản vào CSDL. |
+| | 9. Thông báo đăng ký tài khoản thành công. |
+
+### Alternative Flow
+
+#### 4.1. Thông tin đăng ký không hợp lệ
+
+1. Hệ thống xác định trường thông tin không hợp lệ.
+2. Hệ thống hiển thị thông báo lỗi tương ứng tại trường dữ liệu.
+3. Khách hàng chỉnh sửa thông tin.
+4. Quay lại bước 4.
+
+#### 5.1. Số điện thoại hoặc email đã tồn tại
+
+1. Hệ thống thông báo số điện thoại/email đã được sử dụng.
+2. Khách hàng nhập thông tin khác.
+3. Quay lại bước 4.
+
+### Exception
+
+#### 6.1. Khách hàng hủy đăng ký
+
+1. Khách hàng chọn **"Hủy"**.
+2. Hệ thống hiển thị thông báo xác nhận hủy.
+3. Khách hàng xác nhận hủy.
+4. Hệ thống không tạo tài khoản.
+5. Kết thúc Use Case.
+
+---
+
+# II. TÀI XẾ
+
+## UC02. Quản lý thông tin cá nhân
+
+| Mục | Nội dung |
+|---|---|
+| **Tiền điều kiện** | Tài xế đã đăng nhập thành công. Tài khoản tài xế đang hoạt động. |
+| **Hậu điều kiện** | Nếu cập nhật thành công, thông tin cá nhân mới được lưu vào CSDL. Nếu hủy hoặc dữ liệu không hợp lệ, thông tin cũ được giữ nguyên. |
+| **Actor chính** | Tài xế |
+| **Actor phụ** | Không |
+
+### Basic Flow
+
+| Tài xế | Hệ thống |
+|---|---|
+| 1. Chọn **"Quản lý thông tin cá nhân"**. | 2. Hiển thị trang thông tin cá nhân gồm: họ tên, số điện thoại, email và các thông tin cá nhân đã đăng ký của tài xế. |
+| 3. Chọn **"Cập nhật"**. | 4. Hiển thị biểu mẫu cập nhật với các thông tin hiện tại. |
+| 5. Chỉnh sửa thông tin cần thay đổi. | 6. Kiểm tra dữ liệu nhập. |
+| 7. Chọn **"Lưu"**. | 8. Cập nhật thông tin mới vào CSDL. |
+| | 9. Thông báo cập nhật thành công. |
+
+### Alternative Flow
+
+#### 6.1. Dữ liệu không hợp lệ
+
+1. Hệ thống xác định trường dữ liệu không hợp lệ.
+2. Hệ thống hiển thị thông báo lỗi.
+3. Tài xế chỉnh sửa thông tin.
+4. Quay lại bước 6.
+
+### Exception
+
+#### 7.1. Tài xế hủy cập nhật
+
+1. Tài xế chọn **"Hủy"**.
+2. Hệ thống không lưu thay đổi.
+3. Giữ nguyên thông tin cũ.
+4. Kết thúc Use Case.
+
+---
+
+## UC03. Cập nhật trạng thái làm việc
+
+| Mục | Nội dung |
+|---|---|
+| **Tiền điều kiện** | Tài xế đã đăng nhập thành công. Tài khoản tài xế đang hoạt động. |
+| **Hậu điều kiện** | Trạng thái làm việc mới được cập nhật và lưu vào CSDL. Nếu tài xế đang thực hiện chuyến xe, trạng thái **On Trip** được duy trì. |
+| **Actor chính** | Tài xế |
+| **Actor phụ** | Không |
+
+### Basic Flow
+
+| Tài xế | Hệ thống |
+|---|---|
+| 1. Chọn **"Cập nhật trạng thái làm việc"**. | 2. Hiển thị trạng thái hiện tại của tài xế và các trạng thái có thể lựa chọn. |
+| | 3. Danh sách trạng thái gồm: **Available**, **On Trip** và các trạng thái được hệ thống quy định. |
+| 4. Chọn trạng thái muốn cập nhật. | 5. Kiểm tra trạng thái hiện tại và trạng thái mới. |
+| 6. Xác nhận cập nhật. | 7. Cập nhật trạng thái làm việc. |
+| | 8. Lưu trạng thái mới vào CSDL. |
+| | 9. Thông báo cập nhật thành công. |
+
+### Alternative Flow
+
+#### 5.1. Tài xế đang thực hiện chuyến xe
+
+1. Hệ thống xác định tài xế đang ở trạng thái **On Trip**.
+2. Hệ thống không cho phép chuyển sang **Available**.
+3. Hệ thống thông báo tài xế đang thực hiện chuyến xe.
+4. Kết thúc Use Case.
+
+### Exception
+
+#### 6.1. Tài xế hủy cập nhật
+
+1. Tài xế chọn **"Hủy"**.
+2. Hệ thống giữ nguyên trạng thái hiện tại.
+3. Kết thúc Use Case.
+
+---
+
+## UC04. Tiếp nhận chuyến xe
+
+| Mục | Nội dung |
+|---|---|
+| **Tiền điều kiện** | 1. Tài xế đã đăng nhập.<br>2. Tài xế đang ở trạng thái **Available**.<br>3. Hệ thống đã gửi yêu cầu chuyến đến tài xế. |
+| **Hậu điều kiện** | **Chấp nhận:** Tài xế được gán vào chuyến và trạng thái làm việc chuyển thành **On Trip**.<br>**Từ chối/không phản hồi:** Tài xế không được gán vào chuyến; hệ thống tiếp tục tìm tài xế phù hợp khác. |
+| **Actor chính** | Tài xế |
+| **Actor phụ** | Không |
+
+### Basic Flow
+
+| Tài xế | Hệ thống |
+|---|---|
+| | 1. Gửi thông báo có chuyến xe mới. |
+| 2. Chọn thông báo chuyến xe. | 3. Hiển thị chi tiết yêu cầu chuyến gồm: mã chuyến, điểm đón, điểm đến, loại xe/dịch vụ và thông tin cần thiết của chuyến. |
+| 4. Xem thông tin chuyến xe. | |
+| 5. Chọn **"Chấp nhận"**. | 6. Kiểm tra trạng thái của tài xế và trạng thái yêu cầu chuyến. |
+| | 7. Gán tài xế vào chuyến xe. |
+| | 8. Cập nhật trạng thái tài xế thành **On Trip**. |
+| | 9. Lưu thông tin gán chuyến vào CSDL. |
+| | 10. Thông báo tiếp nhận chuyến thành công. |
+
+### Alternative Flow
+
+#### 5.1. Tài xế từ chối chuyến
+
+1. Tài xế chọn **"Từ chối"**.
+2. Hệ thống hiển thị yêu cầu xác nhận.
+3. Tài xế xác nhận từ chối.
+4. Hệ thống ghi nhận kết quả từ chối.
+5. Hệ thống không gán chuyến cho tài xế.
+6. Kết thúc Use Case.
+
+#### 5.2. Tài xế không phản hồi
+
+1. Hệ thống chờ phản hồi trong thời gian quy định.
+2. Hết thời gian nhưng tài xế không phản hồi.
+3. Hệ thống ghi nhận tài xế không phản hồi.
+4. Không gán chuyến cho tài xế.
+5. Kết thúc Use Case.
+
+### Exception
+
+#### 2.1. Chuyến xe không còn khả dụng
+
+1. Tài xế mở yêu cầu chuyến.
+2. Hệ thống kiểm tra và xác định chuyến đã được tài xế khác tiếp nhận hoặc đã bị hủy.
+3. Hệ thống thông báo chuyến xe không còn khả dụng.
+4. Không thực hiện gán chuyến.
+5. Kết thúc Use Case.
+
+---
+
+## UC05. Cập nhật trạng thái chuyến xe
+
+| Mục | Nội dung |
+|---|---|
+| **Tiền điều kiện** | 1. Tài xế đã đăng nhập.<br>2. Tài xế đã được gán vào chuyến xe.<br>3. Chuyến xe chưa ở trạng thái **Hoàn thành**. |
+| **Hậu điều kiện** | Trạng thái chuyến xe được cập nhật thành công và lưu vào CSDL. Trạng thái được thực hiện theo đúng trình tự nghiệp vụ: **Đã đến điểm đón → Đã đón khách → Đang di chuyển → Hoàn thành**. |
+| **Actor chính** | Tài xế |
+| **Actor phụ** | Không |
+
+### Basic Flow
+
+| Tài xế | Hệ thống |
+|---|---|
+| 1. Chọn chuyến xe đang thực hiện. | 2. Hiển thị thông tin chuyến gồm: mã chuyến, điểm đón, điểm đến, thông tin khách hàng và trạng thái hiện tại. |
+| 3. Chọn trạng thái **"Đã đến điểm đón"**. | 4. Kiểm tra trạng thái hiện tại. |
+| | 5. Cập nhật trạng thái thành **Đã đến điểm đón**. |
+| 6. Chọn trạng thái **"Đã đón khách"**. | 7. Kiểm tra trạng thái hiện tại phải là **Đã đến điểm đón**. |
+| | 8. Cập nhật trạng thái thành **Đã đón khách**. |
+| 9. Chọn trạng thái **"Đang di chuyển"**. | 10. Kiểm tra trạng thái hiện tại phải là **Đã đón khách**. |
+| | 11. Cập nhật trạng thái thành **Đang di chuyển**. |
+| 12. Chọn trạng thái **"Hoàn thành"**. | 13. Kiểm tra trạng thái hiện tại phải là **Đang di chuyển**. |
+| | 14. Cập nhật trạng thái thành **Hoàn thành**. |
+| | 15. Lưu trạng thái mới vào CSDL. |
+| | 16. Thông báo chuyến xe đã hoàn thành. |
+
+### Alternative Flow
+
+#### 3.1. Cập nhật "Đã đến điểm đón"
+
+1. Hệ thống kiểm tra trạng thái hiện tại.
+2. Nếu trạng thái hợp lệ, hệ thống cập nhật thành **Đã đến điểm đón**.
+3. Lưu thay đổi vào CSDL.
+
+#### 6.1. Cập nhật "Đã đón khách"
+
+1. Hệ thống kiểm tra trạng thái hiện tại là **Đã đến điểm đón**.
+2. Cập nhật thành **Đã đón khách**.
+3. Lưu thay đổi vào CSDL.
+
+#### 9.1. Cập nhật "Đang di chuyển"
+
+1. Hệ thống kiểm tra trạng thái hiện tại là **Đã đón khách**.
+2. Cập nhật thành **Đang di chuyển**.
+3. Lưu thay đổi vào CSDL.
+
+### Exception
+
+#### 3.2. Trạng thái không đúng trình tự
+
+1. Tài xế chọn trạng thái không phù hợp.
+2. Hệ thống từ chối cập nhật.
+3. Hệ thống thông báo trạng thái không hợp lệ.
+4. Hiển thị lại trạng thái hiện tại.
+5. Quay lại bước 2.
+
+---
+
+# III. NHÂN VIÊN VẬN HÀNH
+
+## UC06. Quản lý khách hàng
+
+| Mục | Nội dung |
+|---|---|
+| **Tiền điều kiện** | Nhân viên vận hành đã đăng nhập và có quyền quản lý khách hàng. |
+| **Hậu điều kiện** | Thông tin khách hàng được tạo hoặc cập nhật thành công và lưu vào CSDL. |
+| **Actor chính** | Nhân viên vận hành |
+| **Actor phụ** | Không |
+
+### Basic Flow
+
+| Nhân viên vận hành | Hệ thống |
+|---|---|
+| 1. Chọn **"Quản lý khách hàng"**. | 2. Hiển thị danh sách khách hàng gồm: mã khách hàng, họ tên, số điện thoại, email và trạng thái tài khoản. |
+| 3. Chọn một khách hàng trong danh sách. | 4. Hiển thị thông tin chi tiết khách hàng gồm các thông tin đã đăng ký. |
+| 5. Chọn **"Cập nhật"**. | 6. Hiển thị biểu mẫu cập nhật thông tin khách hàng. |
+| 7. Chỉnh sửa thông tin. | 8. Kiểm tra dữ liệu. |
+| 9. Chọn **"Lưu"**. | 10. Cập nhật thông tin vào CSDL. |
+| | 11. Thông báo cập nhật thành công. |
+
+### Alternative Flow
+
+#### 2.1. Danh sách khách hàng có nhiều dữ liệu
+
+1. Hệ thống phân trang danh sách.
+2. Nhân viên chọn trang cần xem.
+3. Hệ thống hiển thị danh sách khách hàng tương ứng.
+
+#### 8.1. Thông tin không hợp lệ
+
+1. Hệ thống thông báo trường dữ liệu không hợp lệ.
+2. Nhân viên chỉnh sửa thông tin.
+3. Quay lại bước 8.
+
+### Exception
+
+#### 9.1. Nhân viên hủy cập nhật
+
+1. Nhân viên chọn **"Hủy"**.
+2. Hệ thống không lưu thay đổi.
+3. Giữ nguyên thông tin khách hàng.
+4. Kết thúc Use Case.
+
+---
+
+## UC07. Quản lý tài xế
+
+| Mục | Nội dung |
+|---|---|
+| **Tiền điều kiện** | Nhân viên vận hành đã đăng nhập và có quyền quản lý tài xế. |
+| **Hậu điều kiện** | Thông tin tài xế được tạo hoặc cập nhật thành công và lưu vào CSDL. |
+| **Actor chính** | Nhân viên vận hành |
+| **Actor phụ** | Không |
+
+### Basic Flow
+
+| Nhân viên vận hành | Hệ thống |
+|---|---|
+| 1. Chọn **"Quản lý tài xế"**. | 2. Hiển thị danh sách tài xế gồm: mã tài xế, họ tên, số điện thoại, thông tin phương tiện và trạng thái làm việc. |
+| 3. Chọn tài xế cần quản lý. | 4. Hiển thị thông tin chi tiết tài xế. |
+| 5. Chọn **"Cập nhật"**. | 6. Hiển thị biểu mẫu cập nhật thông tin tài xế. |
+| 7. Chỉnh sửa thông tin. | 8. Kiểm tra dữ liệu. |
+| 9. Chọn **"Lưu"**. | 10. Cập nhật thông tin vào CSDL. |
+| | 11. Thông báo cập nhật thành công. |
+
+### Alternative Flow
+
+#### 2.1. Có nhiều tài xế
+
+1. Hệ thống phân trang danh sách.
+2. Nhân viên chọn trang cần xem.
+3. Hệ thống hiển thị danh sách tương ứng.
+
+#### 8.1. Dữ liệu không hợp lệ
+
+1. Hệ thống thông báo lỗi.
+2. Nhân viên chỉnh sửa thông tin.
+3. Quay lại bước 8.
+
+### Exception
+
+#### 9.1. Nhân viên hủy cập nhật
+
+1. Nhân viên chọn **"Hủy"**.
+2. Hệ thống không lưu thay đổi.
+3. Kết thúc Use Case.
+
+---
+
+## UC08. Quản lý phương tiện
+
+| Mục | Nội dung |
+|---|---|
+| **Tiền điều kiện** | Nhân viên vận hành đã đăng nhập và có quyền quản lý phương tiện. |
+| **Hậu điều kiện** | Thông tin phương tiện được tạo hoặc cập nhật thành công và lưu vào CSDL. |
+| **Actor chính** | Nhân viên vận hành |
+| **Actor phụ** | Không |
+
+### Basic Flow
+
+| Nhân viên vận hành | Hệ thống |
+|---|---|
+| 1. Chọn **"Quản lý phương tiện"**. | 2. Hiển thị danh sách phương tiện gồm: mã phương tiện, biển số xe, loại xe, tài xế được phân công và trạng thái phương tiện. |
+| 3. Chọn phương tiện cần quản lý. | 4. Hiển thị thông tin chi tiết phương tiện. |
+| 5. Chọn **"Cập nhật"**. | 6. Hiển thị biểu mẫu cập nhật. |
+| 7. Chỉnh sửa thông tin. | 8. Kiểm tra dữ liệu. |
+| 9. Chọn **"Lưu"**. | 10. Lưu thông tin vào CSDL. |
+| | 11. Thông báo cập nhật thành công. |
+
+### Alternative Flow
+
+#### 8.1. Biển số xe đã tồn tại
+
+1. Hệ thống thông báo biển số xe đã được sử dụng.
+2. Nhân viên nhập lại biển số.
+3. Quay lại bước 8.
+
+### Exception
+
+#### 9.1. Nhân viên hủy cập nhật
+
+1. Nhân viên chọn **"Hủy"**.
+2. Hệ thống không lưu thay đổi.
+3. Kết thúc Use Case.
+
+---
+
+## UC09. Giám sát chuyến xe
+
+| Mục | Nội dung |
+|---|---|
+| **Tiền điều kiện** | Nhân viên vận hành đã đăng nhập và có quyền giám sát chuyến xe. |
+| **Hậu điều kiện** | Thông tin chuyến xe và trạng thái hiện tại được hiển thị; dữ liệu được cập nhật theo trạng thái thực tế của chuyến. |
+| **Actor chính** | Nhân viên vận hành |
+| **Actor phụ** | Không |
+
+### Basic Flow
+
+| Nhân viên vận hành | Hệ thống |
+|---|---|
+| 1. Chọn **"Giám sát chuyến xe"**. | 2. Hiển thị danh sách chuyến xe đang hoạt động gồm: mã chuyến, thông tin khách hàng, tài xế, điểm đón, điểm đến và trạng thái chuyến. |
+| 3. Chọn một chuyến xe. | 4. Hiển thị thông tin chi tiết chuyến xe. |
+| | 5. Hiển thị trạng thái hiện tại của chuyến. |
+| | 6. Hiển thị thông tin tài xế và phương tiện. |
+| | 7. Cập nhật thông tin khi trạng thái chuyến thay đổi. |
+| 8. Theo dõi chuyến xe. | |
+
+### Alternative Flow
+
+#### 2.1. Không có chuyến xe đang hoạt động
+
+1. Hệ thống thông báo không có chuyến xe đang hoạt động.
+2. Kết thúc Use Case.
+
+### Exception
+
+#### 3.1. Nhân viên kết thúc giám sát
+
+1. Nhân viên chọn **"Thoát"**.
+2. Hệ thống kết thúc thao tác.
+3. Kết thúc Use Case.
+
+---
+
+# IV. QUẢN TRỊ VIÊN HỆ THỐNG
+
+## UC10. Quản lý tài khoản
+
+| Mục | Nội dung |
+|---|---|
+| **Tiền điều kiện** | Quản trị viên đã đăng nhập và có quyền quản lý tài khoản. |
+| **Hậu điều kiện** | Tài khoản được tạo hoặc cập nhật thành công; thông tin được lưu vào CSDL. |
+| **Actor chính** | Quản trị viên hệ thống |
+| **Actor phụ** | Không |
+
+### Basic Flow
+
+| Quản trị viên | Hệ thống |
+|---|---|
+| 1. Chọn **"Quản lý tài khoản"**. | 2. Hiển thị danh sách tài khoản gồm: mã tài khoản, tên đăng nhập, họ tên người dùng, vai trò, trạng thái tài khoản và ngày tạo. |
+| 3. Chọn tài khoản cần quản lý. | 4. Hiển thị thông tin chi tiết tài khoản. |
+| 5. Chọn **"Cập nhật"**. | 6. Hiển thị biểu mẫu cập nhật tài khoản. |
+| 7. Chỉnh sửa thông tin. | 8. Kiểm tra dữ liệu. |
+| 9. Chọn **"Lưu"**. | 10. Cập nhật thông tin vào CSDL. |
+| | 11. Thông báo cập nhật thành công. |
+
+### Alternative Flow
+
+#### 2.1. Có nhiều tài khoản
+
+1. Hệ thống phân trang danh sách.
+2. Quản trị viên chọn trang cần xem.
+3. Hệ thống hiển thị danh sách tương ứng.
+
+#### 8.1. Thông tin tài khoản không hợp lệ
+
+1. Hệ thống thông báo lỗi.
+2. Quản trị viên chỉnh sửa thông tin.
+3. Quay lại bước 8.
+
+### Exception
+
+#### 9.1. Quản trị viên hủy thao tác
+
+1. Quản trị viên chọn **"Hủy"**.
+2. Hệ thống không lưu thay đổi.
+3. Giữ nguyên thông tin tài khoản.
+4. Kết thúc Use Case.
+
+---
+
+## UC11. Phân quyền người dùng
+
+| Mục | Nội dung |
+|---|---|
+| **Tiền điều kiện** | Quản trị viên đã đăng nhập và có quyền phân quyền người dùng. Tài khoản cần phân quyền đã tồn tại. |
+| **Hậu điều kiện** | Quyền của tài khoản được cập nhật và lưu vào CSDL. Nếu hủy, quyền hiện tại được giữ nguyên. |
+| **Actor chính** | Quản trị viên hệ thống |
+| **Actor phụ** | Không |
+
+### Basic Flow
+
+| Quản trị viên | Hệ thống |
+|---|---|
+| 1. Chọn **"Phân quyền người dùng"**. | 2. Hiển thị danh sách tài khoản gồm: mã tài khoản, tên đăng nhập, họ tên, vai trò và trạng thái tài khoản. |
+| 3. Chọn tài khoản cần phân quyền. | 4. Hiển thị thông tin tài khoản và danh sách quyền hiện tại. |
+| 5. Chọn hoặc bỏ chọn quyền. | 6. Hiển thị các quyền có thể cấp cho tài khoản. |
+| 7. Xác nhận phân quyền. | 8. Kiểm tra quyền được lựa chọn. |
+| | 9. Cập nhật quyền của tài khoản. |
+| | 10. Lưu thông tin phân quyền vào CSDL. |
+| | 11. Thông báo phân quyền thành công. |
+
+### Alternative Flow
+
+#### 6.1. Tài khoản không được phép cấp quyền
+
+1. Hệ thống xác định tài khoản không thuộc phạm vi được phân quyền.
+2. Hệ thống thông báo không thể thực hiện phân quyền.
+3. Kết thúc Use Case.
+
+### Exception
+
+#### 7.1. Quản trị viên hủy phân quyền
+
+1. Quản trị viên chọn **"Hủy"**.
+2. Hệ thống không lưu thay đổi.
+3. Giữ nguyên quyền hiện tại.
+4. Kết thúc Use Case.
+
+---
+
+## UC12. Cấu hình hệ thống
+
+| Mục | Nội dung |
+|---|---|
+| **Tiền điều kiện** | Quản trị viên đã đăng nhập và có quyền cấu hình hệ thống. |
+| **Hậu điều kiện** | Cấu hình hợp lệ được lưu vào CSDL và được áp dụng cho hệ thống. Nếu hủy, cấu hình cũ được giữ nguyên. |
+| **Actor chính** | Quản trị viên hệ thống |
+| **Actor phụ** | Không |
+
+### Basic Flow
+
+| Quản trị viên | Hệ thống |
+|---|---|
+| 1. Chọn **"Cấu hình hệ thống"**. | 2. Hiển thị danh sách cấu hình gồm: tên cấu hình, giá trị hiện tại, đơn vị và trạng thái áp dụng. |
+| 3. Chọn cấu hình cần thay đổi. | 4. Hiển thị thông tin cấu hình hiện tại. |
+| 5. Nhập giá trị mới. | 6. Kiểm tra giá trị cấu hình. |
+| 7. Chọn **"Lưu"**. | 8. Lưu cấu hình mới vào CSDL. |
+| | 9. Áp dụng cấu hình mới. |
+| | 10. Thông báo cập nhật thành công. |
+
+### Alternative Flow
+
+#### 6.1. Giá trị cấu hình không hợp lệ
+
+1. Hệ thống thông báo giá trị không hợp lệ.
+2. Quản trị viên nhập lại giá trị.
+3. Quay lại bước 6.
+
+### Exception
+
+#### 7.1. Quản trị viên hủy cấu hình
+
+1. Quản trị viên chọn **"Hủy"**.
+2. Hệ thống không lưu cấu hình mới.
+3. Giữ nguyên cấu hình hiện tại.
+4. Kết thúc Use Case.
+
+---
+
+## UC13. Xem nhật ký hệ thống
+
+| Mục | Nội dung |
+|---|---|
+| **Tiền điều kiện** | Quản trị viên đã đăng nhập và có quyền xem nhật ký hệ thống. |
+| **Hậu điều kiện** | Các bản ghi nhật ký phù hợp với điều kiện tra cứu được hiển thị. |
+| **Actor chính** | Quản trị viên hệ thống |
+| **Actor phụ** | Không |
+
+### Basic Flow
+
+| Quản trị viên | Hệ thống |
+|---|---|
+| 1. Chọn **"Xem nhật ký hệ thống"**. | 2. Hiển thị danh sách nhật ký gồm: thời gian, tài khoản thực hiện, hành động, đối tượng tác động và kết quả thực hiện. |
+| 3. Nhập điều kiện tra cứu. | 4. Kiểm tra điều kiện tra cứu. |
+| 5. Chọn **"Tra cứu"**. | 6. Tìm kiếm các bản ghi phù hợp. |
+| | 7. Hiển thị danh sách kết quả. |
+| 8. Chọn một bản ghi. | 9. Hiển thị thông tin chi tiết của bản ghi. |
+
+### Alternative Flow
+
+#### 6.1. Không tìm thấy bản ghi
+
+1. Hệ thống thông báo không tìm thấy dữ liệu phù hợp.
+2. Quản trị viên thay đổi điều kiện tra cứu.
+3. Quay lại bước 4.
+
+### Exception
+
+#### 5.1. Quản trị viên hủy tra cứu
+
+1. Quản trị viên chọn **"Hủy"**.
+2. Hệ thống kết thúc thao tác.
+3. Kết thúc Use Case.
 ##B9 : Phân tích quy trình nghiệp vụ ( Business Process )
 | Mã   | Quy trình nghiệp vụ             | Các bước thực hiện                                                                                                                                                                                                                                                                                                                            |
 | ---- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
