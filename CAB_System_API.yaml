@@ -1,0 +1,783 @@
+openapi: 3.0.3
+info:
+  title: CAB System API
+  description: |
+    API mẫu để kiểm thử các chức năng chính của CAB System,
+    dựa trên các Use Case UC01-UC13 trong tài liệu.
+  version: 1.0.0
+
+servers:
+  - url: https://api.example.com
+    description: Demo server
+
+tags:
+  - name: Authentication
+  - name: Customer
+  - name: Driver
+  - name: Operations
+  - name: Administration
+
+paths:
+  /auth/register:
+    post:
+      tags: [Authentication]
+      summary: UC01 - Đăng ký tài khoản
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+            example:
+              fullName: Nguyen Van A
+              phone: "0901234567"
+              email: nguyenvana@example.com
+              password: "123456"
+              confirmPassword: "123456"
+      responses:
+        '201':
+          description: Đăng ký thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Thông tin đăng ký không hợp lệ
+        '409':
+          description: Số điện thoại hoặc email đã tồn tại
+
+  /auth/login:
+    post:
+      tags: [Authentication]
+      summary: Đăng nhập
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              phone: "0901234567"
+              password: "123456"
+      responses:
+        '200':
+          description: Đăng nhập thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Sai thông tin đăng nhập
+
+  /auth/logout:
+    post:
+      tags: [Authentication]
+      summary: Đăng xuất
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Đăng xuất thành công
+        '401':
+          description: Chưa xác thực
+
+  /customers/me:
+    get:
+      tags: [Customer]
+      summary: Xem thông tin cá nhân khách hàng
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Thông tin khách hàng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '401':
+          description: Chưa xác thực
+
+    put:
+      tags: [Customer]
+      summary: Cập nhật thông tin cá nhân khách hàng
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileUpdateRequest'
+            example:
+              fullName: Nguyen Van B
+              phone: "0909876543"
+              email: nguyenvanb@example.com
+      responses:
+        '200':
+          description: Cập nhật thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '400':
+          description: Dữ liệu không hợp lệ
+        '401':
+          description: Chưa xác thực
+
+  /bookings:
+    post:
+      tags: [Customer]
+      summary: Đặt xe
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+            example:
+              pickup: "Đại học Công nghiệp TP.HCM"
+              destination: "Sân bay Tân Sơn Nhất"
+              serviceType: "CAR_4_SEATS"
+      responses:
+        '201':
+          description: Tạo yêu cầu đặt xe thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '400':
+          description: Thiếu hoặc sai thông tin đặt xe
+        '401':
+          description: Chưa xác thực
+
+    get:
+      tags: [Customer]
+      summary: Xem lịch sử chuyến xe
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Danh sách chuyến xe
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Booking'
+        '401':
+          description: Chưa xác thực
+
+  /bookings/{bookingId}:
+    get:
+      tags: [Customer]
+      summary: Theo dõi chuyến đi
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      responses:
+        '200':
+          description: Thông tin chuyến xe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingTracking'
+        '403':
+          description: Không có quyền xem chuyến xe này
+        '404':
+          description: Không tìm thấy chuyến xe
+
+  /drivers/me:
+    get:
+      tags: [Driver]
+      summary: UC02 - Xem thông tin cá nhân tài xế
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Thông tin tài xế
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Driver'
+        '401':
+          description: Chưa xác thực
+
+    put:
+      tags: [Driver]
+      summary: UC02 - Cập nhật thông tin cá nhân tài xế
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileUpdateRequest'
+      responses:
+        '200':
+          description: Cập nhật thành công
+        '400':
+          description: Dữ liệu không hợp lệ
+        '401':
+          description: Chưa xác thực
+
+  /drivers/me/status:
+    put:
+      tags: [Driver]
+      summary: UC03 - Cập nhật trạng thái làm việc
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DriverStatusRequest'
+            example:
+              status: AVAILABLE
+      responses:
+        '200':
+          description: Cập nhật trạng thái thành công
+        '400':
+          description: Trạng thái không hợp lệ
+        '409':
+          description: Tài xế đang thực hiện chuyến xe
+
+  /drivers/me/trips:
+    get:
+      tags: [Driver]
+      summary: UC04 - Xem yêu cầu chuyến được gửi đến
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Danh sách yêu cầu chuyến
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Booking'
+
+  /drivers/me/trips/{bookingId}/accept:
+    post:
+      tags: [Driver]
+      summary: UC04 - Chấp nhận chuyến xe
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      responses:
+        '200':
+          description: Tiếp nhận chuyến thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '404':
+          description: Chuyến xe không còn khả dụng
+        '409':
+          description: Tài xế không ở trạng thái Available
+
+  /drivers/me/trips/{bookingId}/reject:
+    post:
+      tags: [Driver]
+      summary: UC04 - Từ chối chuyến xe
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      responses:
+        '200':
+          description: Đã ghi nhận từ chối
+        '404':
+          description: Chuyến xe không còn khả dụng
+
+  /drivers/me/trips/{bookingId}/status:
+    put:
+      tags: [Driver]
+      summary: UC05 - Cập nhật trạng thái chuyến xe
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/BookingId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TripStatusRequest'
+            example:
+              status: ARRIVED_PICKUP
+      responses:
+        '200':
+          description: Cập nhật trạng thái thành công
+        '400':
+          description: Trạng thái không đúng trình tự
+        '404':
+          description: Không tìm thấy chuyến xe
+
+  /operations/customers:
+    get:
+      tags: [Operations]
+      summary: UC06 - Quản lý khách hàng
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Danh sách khách hàng
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+        '403':
+          description: Không có quyền quản lý khách hàng
+
+  /operations/drivers:
+    get:
+      tags: [Operations]
+      summary: UC07 - Quản lý tài xế
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Danh sách tài xế
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Driver'
+        '403':
+          description: Không có quyền quản lý tài xế
+
+  /operations/vehicles:
+    get:
+      tags: [Operations]
+      summary: UC08 - Quản lý phương tiện
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Danh sách phương tiện
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vehicle'
+        '403':
+          description: Không có quyền quản lý phương tiện
+
+  /operations/trips:
+    get:
+      tags: [Operations]
+      summary: UC09 - Giám sát chuyến xe
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Danh sách chuyến xe đang hoạt động
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookingTracking'
+        '403':
+          description: Không có quyền giám sát chuyến xe
+
+  /admin/accounts:
+    get:
+      tags: [Administration]
+      summary: UC10 - Quản lý tài khoản
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Danh sách tài khoản
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '403':
+          description: Chỉ quản trị viên được phép thực hiện
+
+  /admin/users/{userId}/permissions:
+    put:
+      tags: [Administration]
+      summary: UC11 - Phân quyền người dùng
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PermissionRequest'
+            example:
+              permissions:
+                - MANAGE_CUSTOMERS
+                - MONITOR_TRIPS
+      responses:
+        '200':
+          description: Phân quyền thành công
+        '400':
+          description: Quyền được chọn không hợp lệ
+        '403':
+          description: Tài khoản không thuộc phạm vi được phân quyền
+
+  /admin/configuration:
+    get:
+      tags: [Administration]
+      summary: UC12 - Xem cấu hình hệ thống
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Danh sách cấu hình
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Configuration'
+
+    put:
+      tags: [Administration]
+      summary: UC12 - Cập nhật cấu hình hệ thống
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfigurationRequest'
+            example:
+              key: trip_request_timeout
+              value: "30"
+      responses:
+        '200':
+          description: Cập nhật cấu hình thành công
+        '400':
+          description: Giá trị cấu hình không hợp lệ
+
+  /admin/audit-logs:
+    get:
+      tags: [Administration]
+      summary: UC13 - Xem nhật ký hệ thống
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: action
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: username
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Danh sách nhật ký
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AuditLog'
+        '403':
+          description: Không có quyền xem nhật ký
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    BookingId:
+      name: bookingId
+      in: path
+      required: true
+      schema:
+        type: string
+      example: CAB-000001
+    UserId:
+      name: userId
+      in: path
+      required: true
+      schema:
+        type: string
+      example: USR-000001
+
+  schemas:
+    RegisterRequest:
+      type: object
+      required: [fullName, phone, email, password, confirmPassword]
+      properties:
+        fullName:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+        confirmPassword:
+          type: string
+          format: password
+
+    LoginRequest:
+      type: object
+      required: [phone, password]
+      properties:
+        phone:
+          type: string
+        password:
+          type: string
+          format: password
+
+    LoginResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        tokenType:
+          type: string
+          example: Bearer
+        user:
+          $ref: '#/components/schemas/User'
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: USR-000001
+        fullName:
+          type: string
+          example: Nguyen Van A
+        phone:
+          type: string
+          example: "0901234567"
+        email:
+          type: string
+          format: email
+        role:
+          type: string
+          enum: [CUSTOMER, DRIVER, STAFF, ADMIN]
+        status:
+          type: string
+          enum: [ACTIVE, INACTIVE]
+
+    Customer:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - type: object
+          properties:
+            role:
+              type: string
+              example: CUSTOMER
+
+    Driver:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - type: object
+          properties:
+            role:
+              type: string
+              example: DRIVER
+            workingStatus:
+              type: string
+              enum: [AVAILABLE, ON_TRIP, OFFLINE]
+            vehicleId:
+              type: string
+              example: VEH-000001
+
+    ProfileUpdateRequest:
+      type: object
+      properties:
+        fullName:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+          format: email
+
+    BookingRequest:
+      type: object
+      required: [pickup, destination, serviceType]
+      properties:
+        pickup:
+          type: string
+        destination:
+          type: string
+        serviceType:
+          type: string
+          enum: [CAR_4_SEATS, CAR_7_SEATS, MOTORBIKE]
+
+    Booking:
+      type: object
+      properties:
+        id:
+          type: string
+          example: CAB-000001
+        customerId:
+          type: string
+          example: USR-000001
+        driverId:
+          type: string
+          nullable: true
+          example: USR-000002
+        pickup:
+          type: string
+        destination:
+          type: string
+        serviceType:
+          type: string
+        status:
+          type: string
+          enum:
+            - REQUESTED
+            - DRIVER_ASSIGNED
+            - ARRIVED_PICKUP
+            - PICKED_UP
+            - IN_TRANSIT
+            - COMPLETED
+            - CANCELLED
+        fare:
+          type: number
+          format: double
+          example: 85000
+
+    BookingTracking:
+      allOf:
+        - $ref: '#/components/schemas/Booking'
+        - type: object
+          properties:
+            driver:
+              $ref: '#/components/schemas/Driver'
+            driverLocation:
+              type: object
+              nullable: true
+              properties:
+                latitude:
+                  type: number
+                longitude:
+                  type: number
+            estimatedArrivalMinutes:
+              type: integer
+              example: 5
+
+    DriverStatusRequest:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          enum: [AVAILABLE, OFFLINE]
+
+    TripStatusRequest:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          enum:
+            - ARRIVED_PICKUP
+            - PICKED_UP
+            - IN_TRANSIT
+            - COMPLETED
+
+    Vehicle:
+      type: object
+      properties:
+        id:
+          type: string
+          example: VEH-000001
+        licensePlate:
+          type: string
+          example: 51A-123.45
+        vehicleType:
+          type: string
+          enum: [CAR_4_SEATS, CAR_7_SEATS, MOTORBIKE]
+        driverId:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum: [AVAILABLE, IN_USE, INACTIVE]
+
+    PermissionRequest:
+      type: object
+      required: [permissions]
+      properties:
+        permissions:
+          type: array
+          items:
+            type: string
+          example:
+            - MANAGE_CUSTOMERS
+            - MANAGE_DRIVERS
+            - MANAGE_VEHICLES
+
+    Configuration:
+      type: object
+      properties:
+        key:
+          type: string
+          example: trip_request_timeout
+        value:
+          type: string
+          example: "30"
+        unit:
+          type: string
+          example: seconds
+        status:
+          type: string
+          enum: [ACTIVE, INACTIVE]
+
+    ConfigurationRequest:
+      type: object
+      required: [key, value]
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+
+    AuditLog:
+      type: object
+      properties:
+        id:
+          type: string
+          example: LOG-000001
+        timestamp:
+          type: string
+          format: date-time
+        username:
+          type: string
+        action:
+          type: string
+        target:
+          type: string
+        result:
+          type: string
+          enum: [SUCCESS, FAILED]
