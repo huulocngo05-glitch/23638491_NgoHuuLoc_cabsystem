@@ -193,3 +193,69 @@ CAB SYSTEM
 * **Số Subdomain:** 27
 
 Các Subdomain được phân nhóm theo từng Domain dựa trên trách nhiệm nghiệp vụ, đảm bảo mỗi Subdomain tập trung vào một nhóm chức năng có tính liên kết cao.
+```mermaid
+flowchart LR
+
+    D1["DOMAIN 1<br/>Quản lý người dùng & định danh<br/><br/>
+    ─ Quản lý định danh<br/>
+    ─ Quản lý khách hàng<br/>
+    ─ Quản lý tài xế<br/>
+    ─ Quản lý phương tiện"]
+
+    D2["DOMAIN 2<br/>Quản lý chuyến xe<br/><br/>
+    ─ Đặt xe<br/>
+    ─ Phân công chuyến xe<br/>
+    ─ Quản lý chuyến xe<br/>
+    ─ Theo dõi chuyến xe"]
+
+    D3["DOMAIN 3<br/>Giá cước & thanh toán<br/><br/>
+    ─ Quản lý giá cước<br/>
+    ─ Quản lý thanh toán<br/>
+    ─ Quản lý giao dịch"]
+
+    D4["DOMAIN 4<br/>Thông báo<br/><br/>
+    ─ Quản lý thông báo<br/>
+    ─ Gửi thông báo"]
+
+    D5["DOMAIN 5<br/>Vận hành<br/><br/>
+    ─ Giám sát chuyến xe<br/>
+    ─ Hỗ trợ khách hàng<br/>
+    ─ Xử lý sự cố<br/>
+    ─ Tra cứu vận hành"]
+
+    D6["DOMAIN 6<br/>Báo cáo & phân tích<br/><br/>
+    ─ Báo cáo vận hành<br/>
+    ─ Báo cáo tài chính<br/>
+    ─ Phân tích hiệu quả tài xế"]
+
+    D7["DOMAIN 7<br/>Quản trị & kiểm soát<br/><br/>
+    ─ Cấu hình hệ thống<br/>
+    ─ Quản lý phân quyền<br/>
+    ─ Quản lý nhật ký<br/>
+    ─ Kiểm soát bảo mật"]
+
+
+    %% Quan hệ giữa các Domain
+
+    D1 --> D2
+    D2 --> D3
+    D2 --> D4
+    D2 --> D5
+    D3 --> D4
+    D3 --> D6
+    D5 --> D6
+
+    D7 -.-> D1
+    D7 -.-> D2
+    D7 -.-> D3
+    D7 -.-> D5
+
+
+    %% Định dạng
+
+    classDef domain fill:#F8FAFC,stroke:#334155,stroke-width:2px,color:#111827;
+
+    class D1,D2,D3,D4,D5,D6,D7 domain;
+
+    linkStyle 0,1,2,3,4,5,6 stroke:#2563EB,stroke-width:1.5px;
+    linkStyle 7,8,9,10 stroke:#D97706,stroke-width:1.5px,stroke-dasharray:5 5;
